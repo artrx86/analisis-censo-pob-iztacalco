@@ -6,7 +6,7 @@
 # Package Handling ---------------------------
 
 # Package names
-packages <- c("this.path")
+packages <- c("this.path", "readxl")
 
 # Install packages not yet installed
 installed_packages <- packages %in% rownames(installed.packages())
@@ -18,6 +18,7 @@ if (any(installed_packages == FALSE)) {
 invisible(lapply(packages, library, character.only = TRUE))
 
 # Source calls (script imports) ---------------------------
+source("src/0-data-extract.R")
 
 # Main function ---------------------------
 main <- function() {
@@ -29,8 +30,13 @@ main <- function() {
     })
 
     # call the scripts functions
+    pop_ages_df2020 <- cpv_ages_to_csv(filename = "data/raw/cpv2020_b_cdmx_01_poblacion.xlsx",
+					year = 2020,
+					output_file="data/processed/2020_pop_ages.csv")
     
+    pop_ages_df2010 <- cpv_ages_to_csv(filename = "data/raw/01_03B_MUNICIPAL_09.xls",
+					year = 2010,
+					output_file="data/processed/2010_pop_ages.csv")
 }
 
 main()
-
