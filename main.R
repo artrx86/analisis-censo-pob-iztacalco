@@ -21,6 +21,7 @@ invisible(lapply(packages, library, character.only = TRUE))
 source("src/0-data-extract.R")
 source("src/1-data-evaluation-population-pyramid.R")
 source("src/2-data-evaluation-age-eval-indexes.R")
+source("src/3-data-proration.R")
 
 # if using R IDE try to change working directory to this script location
 tryCatch({ 
@@ -69,11 +70,25 @@ get_myers_index(ages_df = pop_ages_df2010, genre = "male") # male Myers' index f
 get_myers_index(ages_df = pop_ages_df2010, genre = "female") # female Myers' index for 2010: 8.614865
 get_myers_index(ages_df = pop_ages_df2010, genre = "both") # both genders Myers' index for 2010: 8.743216
 
-# From right here we'll work with quinquenial age groups
-pop_ages_quin_df2020 <- get_quinquenial_format_df(pop_ages_df2020)
-pop_ages_quin_df2010 <- get_quinquenial_format_df(pop_ages_df2010)
+# From right here we'll work with quinquenial age groups for some calculations
+pop_ages_quin_df2020 <- get_quinquenial_format_df(ages_df = pop_ages_df2020)
+pop_ages_quin_df2010 <- get_quinquenial_format_df(ages_df = pop_ages_df2010)
 
 # United Nations index
 get_un_age_accuracy_index(ages_df = pop_ages_quin_df2020) # United Nations index for 2020: 15.40797
 get_un_age_accuracy_index(ages_df = pop_ages_quin_df2010) # United Nations index for 2010: 18.33055
+
+# Data proration ---------------------------
+
+# prorated ages by gender dataframe: 
+prorated_pop_ages_df2020 <- get_proration_df(pop_ages_df2020)
+prorated_pop_ages_df2010 <- get_proration_df(pop_ages_df2010)
+
+# Dataframes visualization
+View(prorated_pop_ages_df2020)
+View(prorated_pop_ages_df2010) 
+
+# Validation that checks if totals are still the same
+do_proration_validation(original_df = pop_ages_df2020, prorated_df = prorated_pop_ages_df2020)
+do_proration_validation(original_df = pop_ages_df2010, prorated_df = prorated_pop_ages_df2010)
 

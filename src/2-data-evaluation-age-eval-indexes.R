@@ -1,4 +1,4 @@
-# Excel data evaluation script for Census of Population and Housing (CPV) ages for years 2010 and
+# Data quality evaluation script for Census of Population and Housing (CPV) ages for years 2010 and
 # 2020 in Iztacalco, Mexico City. 
 # Data from: https://en.www.inegi.org.mx/
 # The purpose of this script is to evaluate the data quality by using UN, Whipple and Myers indexes. 
@@ -14,13 +14,13 @@ get_indexes_format_df <- function(ages_df = data.frame(),
 			      genre = "male") {
 
     # Returns a formated dataframe in a friendly format for indexes (Whipple's, Myer's) 
-    # evaluation from an INEGI formated dataframe with the following structure as input (inegi_df):
+    # evaluation from an INEGI formated dataframe with the following structure as input (ages_df):
     # | EDAD [string] | POB_TOTAL [int/num] | HOMBRES [int/num] | MUJERES [int/num] | 
     # 
     # To select the genre to get the formated dataframe values, the param genre = "male", "female", "both"
     # is used.
    
-    # For this evaluation we will not be counting on the unespecified information
+    # For this evaluation we will not be counting on the unspecified information
     index_formated_df <- ages_df %>% head(-1)
 
     # add a column with the age as an integer value
@@ -48,7 +48,7 @@ get_indexes_format_df <- function(ages_df = data.frame(),
 get_quinquenial_format_df <- function(ages_df = data.frame()) {  
     # Returns a formated dataframe in a friendly format (information in quinquenials)
     #
-    # evaluation from an INEGI formated dataframe with the following structure as input (inegi_df):
+    # evaluation from an INEGI formated dataframe with the following structure as input (ages_df):
     # | EDAD [string] | POB_TOTAL [int/num] | HOMBRES [int/num] | MUJERES [int/num] | 
     # 
     # Output dataframe format:
@@ -59,7 +59,7 @@ get_quinquenial_format_df <- function(ages_df = data.frame()) {
     # add a column with the staring age of the range as integer values to group by starting_ages
     quinquenial_formated_df$starting_age = c(rep(seq(0, 95, by = 5), each = 5), 100, 101)
     
-    # add an unespecified value row for unespecified data
+    # add an unspecified value row for unspecified data
     # get the columns required for the dataframe
     quinquenial_formated_df <- quinquenial_formated_df %>% select("starting_age", "males"="HOMBRES", "females"="MUJERES")
     
@@ -72,7 +72,7 @@ get_quinquenial_format_df <- function(ages_df = data.frame()) {
     # add the end of the age ranges for future purposes an readbility of the dataframe
     quinquenial_formated_df$ending_age = c(seq(4, 99, by = 5), NA, NA)
 
-    # Convert the last age range to NA for unespecified information
+    # Convert the last age range to NA for unspecified information
     quinquenial_formated_df$starting_age[22]  <- NA
     # restore column names
     quinquenial_formated_df <- quinquenial_formated_df %>% select("starting_age", "ending_age", "males"="V1", "females"="V2")  
@@ -87,7 +87,7 @@ get_whipple_index <- function(ages_df = data.frame(),
 			      genre = "male") {
     
     # Returns Whipple's index from an INEGI formated dataframe with the following
-    # structure as input (inegi_df):
+    # structure as input (ages_df):
     # | EDAD [string] | POB_TOTAL [int/num] | HOMBRES [int/num] | MUJERES [int/num] | 
     # 
     # To select the genre to get Whipple's index, the param genre = "male", "female", "both"
