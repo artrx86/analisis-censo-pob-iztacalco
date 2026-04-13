@@ -22,6 +22,7 @@ source("src/0-data-extract.R")
 source("src/1-data-evaluation-population-pyramid.R")
 source("src/2-data-evaluation-age-eval-indexes.R")
 source("src/3-data-proration.R")
+source("src/4-masculinity-index.R")
 
 # if using R IDE try to change working directory to this script location
 tryCatch({ 
@@ -92,3 +93,14 @@ View(prorated_pop_ages_df2010)
 do_proration_validation(original_df = pop_ages_df2020, prorated_df = prorated_pop_ages_df2020)
 do_proration_validation(original_df = pop_ages_df2010, prorated_df = prorated_pop_ages_df2010)
 
+# Masculinity (sex-ratio) Index ---------------------------
+# Group prorated dataframe by quinquenials 
+prorated_pop_ages_quin_df2020 <- get_quinquenial_format_df(ages_df = prorated_pop_ages_df2020)
+prorated_pop_ages_quin_df2010 <- get_quinquenial_format_df(ages_df = prorated_pop_ages_df2010)
+
+masc_index_df2020 <- get_masc_index_df(prorated_pop_ages_quin_df2020)
+masc_index_df2010 <- get_masc_index_df(prorated_pop_ages_quin_df2010)
+
+# Visualization of the dataframes
+View(masc_index_df2020)
+View(masc_index_df2010)

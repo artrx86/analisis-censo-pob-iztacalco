@@ -1,7 +1,7 @@
 # Data proration script for Census of Population and Housing (CPV) ages for years 2010 and
 # 2020 in Iztacalco, Mexico City. 
 # Data from: https://en.www.inegi.org.mx/
-# The purpose of this script is to evaluate the data quality by using UN, Whipple and Myers indexes. 
+# The purpose of this script is to do proration for the unspecified age group into all the age groups 
 #
 # Made by: https://github.com/artrx86
 
@@ -81,7 +81,10 @@ get_proration_df <- function(inegi_df = data.frame()) {
     
     # reorganize columns
     proration_df <- proration_df %>% select("EDAD", "POB_TOTAL", "HOMBRES", "MUJERES")
-    
+   
+    # add again the unspecified values columns but with 0 values to keep the compatibility with other functions
+    proration_df <- proration_df %>% rbind(list("No especificado", 0, 0, 0))
+
     return (proration_df)
 }
 

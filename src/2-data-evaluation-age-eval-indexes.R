@@ -57,8 +57,8 @@ get_quinquenial_format_df <- function(ages_df = data.frame()) {
     quinquenial_formated_df <- ages_df 
 
     # add a column with the staring age of the range as integer values to group by starting_ages
-    quinquenial_formated_df$starting_age = c(rep(seq(0, 95, by = 5), each = 5), 100, 101)
-    
+    quinquenial_formated_df$starting_age = c(rep(seq(0, 85, by = 5), each = 5), rep(85, each=11), 101)
+   
     # add an unspecified value row for unspecified data
     # get the columns required for the dataframe
     quinquenial_formated_df <- quinquenial_formated_df %>% select("starting_age", "males"="HOMBRES", "females"="MUJERES")
@@ -68,12 +68,11 @@ get_quinquenial_format_df <- function(ages_df = data.frame()) {
 			       by = list(starting_age = quinquenial_formated_df$starting_age),
 			       FUN = sum)
 
-    
     # add the end of the age ranges for future purposes an readbility of the dataframe
-    quinquenial_formated_df$ending_age = c(seq(4, 99, by = 5), NA, NA)
+    quinquenial_formated_df$ending_age = c(seq(4, 84, by = 5), NA, NA)
 
     # Convert the last age range to NA for unspecified information
-    quinquenial_formated_df$starting_age[22]  <- NA
+    quinquenial_formated_df$starting_age[19]  <- NA
     # restore column names
     quinquenial_formated_df <- quinquenial_formated_df %>% select("starting_age", "ending_age", "males"="V1", "females"="V2")  
 
@@ -177,9 +176,9 @@ get_myers_index <- function(ages_df = data.frame(),
 # UN Age Sex Accuracy Index 
 get_un_age_accuracy_index <- function(ages_df_quinquenial = data.frame()) {
 
-    # Returns UN Age Sex Accuracy Index from an INEGI formated dataframe with the following
+    # Returns UN Age Sex Accuracy Index from an Inegi quintenial dataframe formated dataframe with the following
     # structure as input:
-    # | EDAD [string] | POB_TOTAL [int/num] | HOMBRES [int/num] | MUJERES [int/num] | 
+    # | starting_age [int/num] | ending_age [int/num] | males [int/num] | females [int/num] | 
     #
     # Used formula:
     # I_UN = I_M + I_F + 3I_{BS}
@@ -190,7 +189,7 @@ get_un_age_accuracy_index <- function(ages_df_quinquenial = data.frame()) {
     un_pop_df <- ages_df_quinquenial 
   
     # get only from 0-4 to 70-74 age ranges 
-    un_pop_df <- un_pop_df %>% head(-7)
+    un_pop_df <- un_pop_df %>% head(-4)
     
     # un_pop_df <- ages_df %>% head(-)
     # male r calculation
