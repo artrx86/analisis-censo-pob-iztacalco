@@ -23,6 +23,7 @@ source("src/1-data-evaluation-population-pyramid.R")
 source("src/2-data-evaluation-age-eval-indexes.R")
 source("src/3-data-proration.R")
 source("src/4-masculinity-index.R")
+source("src/5-dependency-index.R")
 
 # if using R IDE try to change working directory to this script location
 tryCatch({ 
@@ -54,22 +55,22 @@ pop_ages_pyramid2020
 pop_ages_pyramid2010
 
 # Whipple's index
-get_whipple_index(ages_df = pop_ages_df2020, genre = "male") # male whipple's index for 2020: 121.3968
-get_whipple_index(ages_df = pop_ages_df2020, genre = "female") # female whipple's index for 2020: 120.0111
-get_whipple_index(ages_df = pop_ages_df2020, genre = "both") # both genders whipple's index for 2020: 120.667
+get_whipple_index(ages_df = pop_ages_df2020, gender = "male") # male whipple's index for 2020: 121.3968
+get_whipple_index(ages_df = pop_ages_df2020, gender = "female") # female whipple's index for 2020: 120.0111
+get_whipple_index(ages_df = pop_ages_df2020, gender = "both") # both genders whipple's index for 2020: 120.667
 
-get_whipple_index(ages_df = pop_ages_df2010, genre = "male") # male whipple's index for 2010: 117.4276
-get_whipple_index(ages_df = pop_ages_df2010, genre = "female") # female whipple's index for 2010: 118.0947
-get_whipple_index(ages_df = pop_ages_df2010, genre = "both") # both genders whipple's index for 2010: 117.7829
+get_whipple_index(ages_df = pop_ages_df2010, gender = "male") # male whipple's index for 2010: 117.4276
+get_whipple_index(ages_df = pop_ages_df2010, gender = "female") # female whipple's index for 2010: 118.0947
+get_whipple_index(ages_df = pop_ages_df2010, gender = "both") # both genders whipple's index for 2010: 117.7829
 
 # Myers' index
-get_myers_index(ages_df = pop_ages_df2020, genre = "male") # male Myers' index for 2020: 9.422554 
-get_myers_index(ages_df = pop_ages_df2020, genre = "female") # female Myers' index for 2020: 9.218148 
-get_myers_index(ages_df = pop_ages_df2020, genre = "both") # both genders Myers' index for 2020: 9.315056
+get_myers_index(ages_df = pop_ages_df2020, gender = "male") # male Myers' index for 2020: 9.422554 
+get_myers_index(ages_df = pop_ages_df2020, gender = "female") # female Myers' index for 2020: 9.218148 
+get_myers_index(ages_df = pop_ages_df2020, gender = "both") # both genders Myers' index for 2020: 9.315056
 
-get_myers_index(ages_df = pop_ages_df2010, genre = "male") # male Myers' index for 2010: 8.88766 
-get_myers_index(ages_df = pop_ages_df2010, genre = "female") # female Myers' index for 2010: 8.614865
-get_myers_index(ages_df = pop_ages_df2010, genre = "both") # both genders Myers' index for 2010: 8.743216
+get_myers_index(ages_df = pop_ages_df2010, gender = "male") # male Myers' index for 2010: 8.88766 
+get_myers_index(ages_df = pop_ages_df2010, gender = "female") # female Myers' index for 2010: 8.614865
+get_myers_index(ages_df = pop_ages_df2010, gender = "both") # both genders Myers' index for 2010: 8.743216
 
 # From right here we'll work with quinquenial age groups for some calculations
 pop_ages_quin_df2020 <- get_quinquenial_format_df(ages_df = pop_ages_df2020)
@@ -104,3 +105,15 @@ masc_index_df2010 <- get_masc_index_df(prorated_pop_ages_quin_df2010)
 # Visualization of the dataframes
 View(masc_index_df2020)
 View(masc_index_df2010)
+
+# Dependency Ratio ---------------------------
+# Dependency ratio for 2020
+get_dependency_index(prorated_pop_ages_quin_df2020, gender = "male") # 40.48327
+get_dependency_index(prorated_pop_ages_quin_df2020, gender = "female") # 42.19211
+get_dependency_index(prorated_pop_ages_quin_df2020, gender = "both") # 41.37474
+
+# Dependency ratio for 2010
+get_dependency_index(prorated_pop_ages_quin_df2010, gender = "male") # 44.40538 
+get_dependency_index(prorated_pop_ages_quin_df2010, gender = "female") # 43.99956
+get_dependency_index(prorated_pop_ages_quin_df2010, gender = "both") # 44.19202 
+

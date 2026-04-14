@@ -11,13 +11,13 @@ library(dplyr)
 # Dataframe formating for evaluation ---------------------------
 
 get_indexes_format_df <- function(ages_df = data.frame(),
-			      genre = "male") {
+			      gender = "both") {
 
     # Returns a formated dataframe in a friendly format for indexes (Whipple's, Myer's) 
     # evaluation from an INEGI formated dataframe with the following structure as input (ages_df):
     # | EDAD [string] | POB_TOTAL [int/num] | HOMBRES [int/num] | MUJERES [int/num] | 
     # 
-    # To select the genre to get the formated dataframe values, the param genre = "male", "female", "both"
+    # To select the gender to get the formated dataframe values, the param gender = "male", "female", "both"
     # is used.
    
     # For this evaluation we will not be counting on the unspecified information
@@ -26,18 +26,18 @@ get_indexes_format_df <- function(ages_df = data.frame(),
     # add a column with the age as an integer value
     index_formated_df$age = c(0:100)
 
-    # get the columns required for the dataframe according to the selected genre
-    if (genre == "male") {
+    # get the columns required for the dataframe according to the selected gender
+    if (gender == "male") {
 	index_formated_df <- index_formated_df %>% select("age", "population"="HOMBRES")
 
     }
     # apply the formula to the dataframe by using for cycles
 
-    else if (genre == "female") {
+    else if (gender == "female") {
 	index_formated_df <- index_formated_df %>% select("age", "population"="MUJERES")
     }
 
-    else if (genre == "both") {
+    else if (gender == "both") {
 	index_formated_df <- index_formated_df %>% select("age", "population"="POB_TOTAL")
     }
 
@@ -83,18 +83,18 @@ get_quinquenial_format_df <- function(ages_df = data.frame()) {
 # Whipple's index ---------------------------
 
 get_whipple_index <- function(ages_df = data.frame(),
-			      genre = "male") {
+			      gender = "both") {
     
     # Returns Whipple's index from an INEGI formated dataframe with the following
     # structure as input (ages_df):
     # | EDAD [string] | POB_TOTAL [int/num] | HOMBRES [int/num] | MUJERES [int/num] | 
     # 
-    # To select the genre to get Whipple's index, the param genre = "male", "female", "both"
+    # To select the gender to get Whipple's index, the param gender = "male", "female", "both"
     # is used
     # Used formula: $\frac{5 \sum_5^12}{\sum_{i=23}^{62} Pi} * 100$
 
     # dataframe formating
-    whipple_pop_df <- get_indexes_format_df(ages_df, genre) 
+    whipple_pop_df <- get_indexes_format_df(ages_df, gender) 
     
     # get the sum for the numerator
     whipple_numerator <- 5 * with(whipple_pop_df, sum(population[(age %% 5 == 0) & (25 <= age) & (age <= 60)])) 
@@ -110,20 +110,20 @@ get_whipple_index <- function(ages_df = data.frame(),
 
 # Myers' index
 get_myers_index <- function(ages_df = data.frame(),
-			      genre = "male") {
+			      gender = "both") {
 
     # Returns Myers' index from an INEGI formated dataframe with the following
     # structure as input:
     # | EDAD [string] | POB_TOTAL [int/num] | HOMBRES [int/num] | MUJERES [int/num] | 
     # 
-    # To select the genre to get Myers' index, the param genre = "male", "female", "both"
+    # To select the gender to get Myers' index, the param gender = "male", "female", "both"
     # is used
     # Used formula:
     # M_j = ( (\frac{a_jp_j + a_j'p_j'}{\sum_0^9(a_jp_j + a_j'p_j')}) - 10% ) * 100
     # I_M = \sum_j^9\|M_j\|, 0 < M_j < 180
    
     # dataframe formating
-    myers_pop_df <- get_indexes_format_df(ages_df, genre) 
+    myers_pop_df <- get_indexes_format_df(ages_df, gender) 
     
     # P_j construction so pj_vector = c(P_1, P_2, P_3, ..., P_9) where:
     # P_j = \sum_{i \geq 1}{6} P_{10i + j}
