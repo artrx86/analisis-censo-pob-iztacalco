@@ -24,6 +24,7 @@ source("src/2-data-evaluation-age-eval-indexes.R")
 source("src/3-data-proration.R")
 source("src/4-masculinity-index.R")
 source("src/5-dependency-index.R")
+source("src/6-spline-quadrature-factor.R")
 
 # if using R IDE try to change working directory to this script location
 tryCatch({ 
@@ -116,4 +117,86 @@ get_dependency_index(prorated_pop_ages_quin_df2020, gender = "both") # 41.37474
 get_dependency_index(prorated_pop_ages_quin_df2010, gender = "male") # 44.40538 
 get_dependency_index(prorated_pop_ages_quin_df2010, gender = "female") # 43.99956
 get_dependency_index(prorated_pop_ages_quin_df2010, gender = "both") # 44.19202 
+
+# Spline function application ---------------------------
+# first we make the prorated_pop_ages_df2020 graph to apply the spline in a more visual way 
+plot(seq(0,100), prorated_pop_ages_df2020$HOMBRES[1:101], pch = 16, col = "violet", main = "males")
+plot(seq(0,100), prorated_pop_ages_df2020$MUJERES[1:101], pch = 16, col = "violet", main = "females")
+
+# now we make the same with the 2010 data
+plot(seq(0,100), prorated_pop_ages_df2010$HOMBRES[1:101], pch = 16, col = "violet", main = "males")
+plot(seq(0,100), prorated_pop_ages_df2010$MUJERES[1:101], pch = 16, col = "violet", main = "females")
+
+# apply spline to the dataframes
+spline_2020df_males <- get_spline_df(prorated_pop_ages_df2020, "males", 0.425)
+spline_2020df_females <- get_spline_df(prorated_pop_ages_df2020, "females", 0.425)
+
+spline_2010df_males <- get_spline_df(prorated_pop_ages_df2010, "males", 0.425)
+spline_2010df_females <- get_spline_df(prorated_pop_ages_df2010, "females", 0.425)
+
+# graphs to check how smooth is the spline
+plot(seq(0,101), prorated_pop_ages_df2020$HOMBRES, type = "l", pch = 16, col = "violet", main = "males")
+lines(spline_2020df_males, col = "blue", lwd = 2)
+
+plot(seq(0,101), prorated_pop_ages_df2020$MUJERES, type = "l", pch = 16, col = "violet", main = "females")
+lines(spline_2020df_females, col = "blue", lwd = 2)
+
+plot(seq(0,101), prorated_pop_ages_df2010$HOMBRES, type = "l", pch = 16, col = "violet", main = "males")
+lines(spline_2010df_males, col = "blue", lwd = 2)
+
+plot(seq(0,101), prorated_pop_ages_df2010$MUJERES, type = "l", pch = 16, col = "violet", main = "females")
+lines(spline_2010df_females, col = "blue", lwd = 2)
+
+spline_corrected_2020df <- data.frame(EDAD = spline_2020df_males$x,
+				      POB_TOTAL = (spline_2020df_males$y + spline_2020df_females$y),
+				      HOMBRES = spline_2020df_males$y,
+				      MUJERES = spline_2020df_females$y)
+
+spline_corrected_2010df <- data.frame(EDAD = spline_2010df_males$x,
+				      POB_TOTAL = (spline_2010df_males$y + spline_2010df_females$y),
+				      HOMBRES = spline_2010df_males$y,
+				      MUJERES = spline_2010df_females$y)
+
+# Quadrature factor application ---------------------------
+quadrature_factor_2020df <- get_quadrature_factor_df(corrected_inegi_df = spline_corrected_2020df,
+						     inegi_df = prorated_pop_ages_df2020) 
+quadrature_factor_2010df <- get_quadrature_factor_df(corrected_inegi_df = spline_corrected_2010df,
+						     inegi_df = prorated_pop_ages_df2010) 
+# visualization 
+View(quadrature_factor_2020df)
+View(quadrature_factor_2010df)
+
+# validation tests
+print(do_quadrature_factor_validation(quadrature_factor_inegi_df = quadrature_factor_2020df,
+				      inegi_df = prorated_pop_ages_df2020))
+
+print(do_quadrature_factor_validation(quadrature_factor_inegi_df = quadrature_factor_2010df,
+				      inegi_df = prorated_pop_ages_df2010))
+
+# Poblational Pyramid Pt. 2 ---------------------------
+
+# convert quadrature_factor_20XXdf to quinquenial formating
+quadrature_factor_quin_2020df <-  get_quinquenial_format_df(ages_df = quadrature_factor_2020df)
+			
+quadrature_factor_quin_2010df <-  get_quinquenial_format_df(ages_df = quadrature_factor_2010df)
+
+View(quadrature_factor_quin_2020df)
+View(quadrature_factor_quin_2010df)
+
+quadrature_factor_quin_2020df$age <- paste(quadrature_factor_quin_2020df$starting_age, "-"  ,quadrature_factor_quin_2020df$ending_age)
+quadrature_factor_quin_2010df$age <- paste(quadrature_factor_quin_2010df$starting_age, "-"  ,quadrature_factor_quin_2010df$ending_age)
+
+# select the columns to use
+quadrature_factor_quin_2020df <- quadrature_factor_quin_2020df %>% select("EDAD"="age",
+									  "MUJERES" = "females",
+									  "HOMBRES" = "males") 
+
+quadrature_factor_quin_2010df <- quadrature_factor_quin_2010df %>% select("EDAD"="age",
+									  "MUJERES" = "females",
+									  "HOMBRES" = "males") 
+
+# get the pyramids
+graph_pop_pyramid(inegi_df = quadrature_factor_quin_2020df)
+graph_pop_pyramid(inegi_df = quadrature_factor_quin_2010df)
+
 

@@ -1,7 +1,7 @@
 # Dependency index script for Census of Population and Housing (CPV) ages for years 2010 and
 # 2020 in Iztacalco, Mexico City. 
 # Data from: https://en.www.inegi.org.mx/
-# The purpose of this script is to get the Masculinity index from a quinquenial grouped inegi formated
+# The purpose of this script is to get the Dependency index from a quinquenial grouped inegi formated
 # dataframe. 
 #
 # Made by: https://github.com/artrx86

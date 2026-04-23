@@ -18,8 +18,16 @@ pop_to_ggplot2 <- function(inegi_df = data.frame()) {
     
     # Into an more ggplot2 friendly dataframe with the following structure as output:
     # | EDAD [str] | POBLACION [int/num] | GENERO[str] | 
-    
-    inegi_df[101, "EDAD"] <- "Mayor o igual a 100 años"
+
+    # all ages formating
+    if (nrow(inegi_df) >= 101) {
+	inegi_df[101, "EDAD"] <- "Mayor o igual a 100 años"
+    }
+    # quinquenial formating
+    else if (nrow(inegi_df) == 19) {
+	inegi_df <- head(inegi_df, -1)
+	inegi_df[18, "EDAD"] <- "Mayor o igual a 85 años"
+    } 
 
     # Separate the dataframe into male and female gender to do a vertical join
     ggplot_df_males <- inegi_df[,c("EDAD", "HOMBRES")]
