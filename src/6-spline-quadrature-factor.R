@@ -29,6 +29,7 @@ get_spline_df <- function(inegi_df = data.frame(), gender="males", spar_value = 
     return(smooth.spline(seq(0,100), gender_column[1:101],  spar = spar_value)) 
 }
 
+# Quadrature Factor handlers -------------------------
 get_quadrature_factor_df <- function(corrected_inegi_df = data.frame(), inegi_df = data.frame()) {
     # applies quadrature factor to a corrected INEGI formated dataframe with the following
     # structure required as input (corrected_inegi_df):
@@ -53,6 +54,7 @@ get_quadrature_factor_df <- function(corrected_inegi_df = data.frame(), inegi_df
 
     return(quadrature_fact_df)
 }
+
 
 do_quadrature_factor_validation <- function(quadrature_factor_inegi_df = data.frame(), inegi_df = data.frame()) {
     # structure required as input (inegi_df, quadrature_factor_inegi_df):

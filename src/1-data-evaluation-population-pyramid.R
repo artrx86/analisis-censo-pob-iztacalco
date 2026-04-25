@@ -14,7 +14,7 @@ library(ggplot2)
 pop_to_ggplot2 <- function(inegi_df = data.frame()) {
 
     # Transform an INEGI formated dataframe with the following structure as input:
-    # | EDAD [str] | POB_TOTAL [int/num] | HOMBRES [int/num] | MUJERES [int/num] | 
+    # | EDAD [str] | POB_TOTAL [int/num] (could be excluded) | HOMBRES [int/num] | MUJERES [int/num] | 
     
     # Into an more ggplot2 friendly dataframe with the following structure as output:
     # | EDAD [str] | POBLACION [int/num] | GENERO[str] | 

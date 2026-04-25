@@ -25,6 +25,7 @@ source("src/3-data-proration.R")
 source("src/4-masculinity-index.R")
 source("src/5-dependency-index.R")
 source("src/6-spline-quadrature-factor.R")
+source("src/7-population-growth-projection.R")
 
 # if using R IDE try to change working directory to this script location
 tryCatch({ 
@@ -183,20 +184,88 @@ quadrature_factor_quin_2010df <-  get_quinquenial_format_df(ages_df = quadrature
 View(quadrature_factor_quin_2020df)
 View(quadrature_factor_quin_2010df)
 
-quadrature_factor_quin_2020df$age <- paste(quadrature_factor_quin_2020df$starting_age, "-"  ,quadrature_factor_quin_2020df$ending_age)
-quadrature_factor_quin_2010df$age <- paste(quadrature_factor_quin_2010df$starting_age, "-"  ,quadrature_factor_quin_2010df$ending_age)
+quadrature_factor_quin_pyramid_2020df <- quadrature_factor_quin_2020df
+quadrature_factor_quin_pyramid_2010df <- quadrature_factor_quin_2010df
+
+quadrature_factor_quin_pyramid_2020df$age <- paste(quadrature_factor_quin_2020df$starting_age,
+						   "-", 
+						   quadrature_factor_quin_2020df$ending_age)
+quadrature_factor_quin_pyramid_2010df$age <- paste(quadrature_factor_quin_2010df$starting_age,
+						   "-", 
+						   quadrature_factor_quin_2010df$ending_age)
 
 # select the columns to use
-quadrature_factor_quin_2020df <- quadrature_factor_quin_2020df %>% select("EDAD"="age",
+quadrature_factor_quin_pyramid_2020df <- quadrature_factor_quin_pyramid_2020df %>% select("EDAD"="age",
 									  "MUJERES" = "females",
 									  "HOMBRES" = "males") 
 
-quadrature_factor_quin_2010df <- quadrature_factor_quin_2010df %>% select("EDAD"="age",
+quadrature_factor_quin_pyramid_2010df <- quadrature_factor_quin_pyramid_2010df %>% select("EDAD"="age",
 									  "MUJERES" = "females",
 									  "HOMBRES" = "males") 
 
 # get the pyramids
-graph_pop_pyramid(inegi_df = quadrature_factor_quin_2020df)
-graph_pop_pyramid(inegi_df = quadrature_factor_quin_2010df)
+graph_pop_pyramid(inegi_df = quadrature_factor_quin_pyramid_2020df)
+graph_pop_pyramid(inegi_df = quadrature_factor_quin_pyramid_2010df)
 
+# Population Growth  ---------------------------
+date_2020_census <- as.Date("2020-03-15")
+date_2010_census <- as.Date("2010-06-12")
+
+years_passed_btwn_census <-  as.numeric(difftime(date_2020_census, date_2010_census, units = "days") / 365)
+
+# getting population growth rates (9.76 aprox. years in this case)
+
+geometric_pg_2010_2020_rate_df <- get_geometric_pg_rate(inegi_quinquenial_df = quadrature_factor_quin_2010df, comparison_df = quadrature_factor_quin_2020df, years_passed=years_passed_btwn_census)
+exponential_pg_2010_2020_rate_df <- get_exponential_pg_rate(inegi_quinquenial_df = quadrature_factor_quin_2010df, comparison_df = quadrature_factor_quin_2020df, years_passed=years_passed_btwn_census)
+
+View(geometric_pg_2010_2020_rate_df)
+View(exponential_pg_2010_2020_rate_df)
+
+# Getting population projections 
+
+# up to 2015-06-30 from 2010-06-12
+
+date_2015_projection <- as.Date("2015-06-30")
+
+projection_2010_2015_years_passed <- as.numeric(difftime(date_2015_projection, 
+							 date_2010_census,
+							 units = "days") / 365)
+
+geom_projection_2010_2015_df <- get_geometric_pg_projection(inegi_quinquenial_df = quadrature_factor_quin_2010df,
+						       projection_rates_df = geometric_pg_2010_2020_rate_df,
+						       years_projection_time = projection_2010_2015_years_passed) 
+
+exp_projection_2010_2015_df <- get_exponential_pg_projection(inegi_quinquenial_df = quadrature_factor_quin_2010df,
+			    projection_rates_df = exponential_pg_2010_2020_rate_df,
+			    years_projection_time = projection_2010_2015_years_passed) 
+
+# up to 2015-06-30 from 2010-06-12
+date_2020_projection <- as.Date("2020-06-30")
+
+projection_2020_2020_years_passed <- as.numeric(difftime(date_2020_projection, 
+							 date_2020_census,
+							 units = "days") / 365)
+
+geom_projection_2020_2020_df <- get_geometric_pg_projection(inegi_quinquenial_df = quadrature_factor_quin_2020df,
+						       projection_rates_df = geometric_pg_2010_2020_rate_df,
+						       years_projection_time = projection_2020_2020_years_passed) 
+
+exp_projection_2020_2020_df <- get_exponential_pg_projection(inegi_quinquenial_df = quadrature_factor_quin_2020df,
+			    projection_rates_df = exponential_pg_2010_2020_rate_df,
+			    years_projection_time = projection_2020_2020_years_passed) 
+
+# Data visualization
+
+# Pre-Projected dataframes
+
+View(quadrature_factor_quin_2010df)		
+View(quadrature_factor_quin_2020df)	
+
+# Projections up to 2015-06-30		#		
+View(geom_projection_2010_2015_df)	#
+View(exp_projection_2010_2015_df) 	# why geometric and exponential growth assumptions
+					# yields the same population projections:   					# 
+# Projections to 2020-06-30		# https://pubmed.ncbi.nlm.nih.gov/12159257/
+View(geom_projection_2020_2020_df)	#
+View(exp_projection_2020_2020_df) 	#
 
