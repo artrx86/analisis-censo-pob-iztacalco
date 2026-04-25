@@ -1,8 +1,8 @@
 ### Iztacalco: Una alcaldía en invierno demográfico.
 
 <p align="center">
-    <img src="https://upload.wikimedia.org/wikipedia/commons/c/c5/Templo_y_Antiguo_Convento_de_San_Mat%C3%ADas_Ap%C3%B3stol_09.jpg"/>
     <figcaption> Imagen por Gunnar Wolf - Trabajo Propio, CC BY-SA 3.0, https://commons.wikimedia.org/w/index.php?curid=21234451 <figcaption>
+    <img src="https://upload.wikimedia.org/wikipedia/commons/c/c5/Templo_y_Antiguo_Convento_de_San_Mat%C3%ADas_Ap%C3%B3stol_09.jpg"/>
 </p>
 
 Este proyecto fue realizado para el curso de Demografía de la
