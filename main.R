@@ -187,12 +187,15 @@ View(quadrature_factor_quin_2010df)
 quadrature_factor_quin_pyramid_2020df <- quadrature_factor_quin_2020df
 quadrature_factor_quin_pyramid_2010df <- quadrature_factor_quin_2010df
 
-quadrature_factor_quin_pyramid_2020df$age <- paste(quadrature_factor_quin_2020df$starting_age,
+quadrature_factor_quin_pyramid_2020df$age <- paste(sprintf("%02d",
+							   quadrature_factor_quin_2020df$starting_age),
 						   "-", 
-						   quadrature_factor_quin_2020df$ending_age)
-quadrature_factor_quin_pyramid_2010df$age <- paste(quadrature_factor_quin_2010df$starting_age,
+						   sprintf("%02d",quadrature_factor_quin_2020df$ending_age))
+
+quadrature_factor_quin_pyramid_2010df$age <- paste(sprintf("%02d",
+							   quadrature_factor_quin_2010df$starting_age),
 						   "-", 
-						   quadrature_factor_quin_2010df$ending_age)
+						   sprintf("%02d",quadrature_factor_quin_2010df$ending_age))
 
 # select the columns to use
 quadrature_factor_quin_pyramid_2020df <- quadrature_factor_quin_pyramid_2020df %>% select("EDAD"="age",
@@ -204,8 +207,11 @@ quadrature_factor_quin_pyramid_2010df <- quadrature_factor_quin_pyramid_2010df %
 									  "HOMBRES" = "males") 
 
 # get the pyramids
-graph_pop_pyramid(inegi_df = quadrature_factor_quin_pyramid_2020df)
-graph_pop_pyramid(inegi_df = quadrature_factor_quin_pyramid_2010df)
+quadrature_factor_quin_pyramid_2020 <- graph_pop_pyramid(inegi_df = quadrature_factor_quin_pyramid_2020df)
+quadrature_factor_quin_pyramid_2010 <- graph_pop_pyramid(inegi_df = quadrature_factor_quin_pyramid_2010df)
+
+quadrature_factor_quin_pyramid_2020
+quadrature_factor_quin_pyramid_2010
 
 # Population Growth  ---------------------------
 date_2020_census <- as.Date("2020-03-15")
@@ -261,11 +267,15 @@ exp_projection_2020_2020_df <- get_exponential_pg_projection(inegi_quinquenial_d
 View(quadrature_factor_quin_2010df)		
 View(quadrature_factor_quin_2020df)	
 
-# Projections up to 2015-06-30		#		
-View(geom_projection_2010_2015_df)	#
-View(exp_projection_2010_2015_df) 	# why geometric and exponential growth assumptions
-					# yields the same population projections:   					# 
-# Projections to 2020-06-30		# https://pubmed.ncbi.nlm.nih.gov/12159257/
-View(geom_projection_2020_2020_df)	#
-View(exp_projection_2020_2020_df) 	#
+# Projections up to 2015-06-30		      	
+View(geom_projection_2010_2015_df)	
+View(exp_projection_2010_2015_df) 			 
+
+# Projections to 2020-06-30		
+View(geom_projection_2020_2020_df)	
+View(exp_projection_2020_2020_df) 	
+
+# why geometric and exponential growth assumptions
+# yields the same population projections: 
+# https://pubmed.ncbi.nlm.nih.gov/12159257/
 
