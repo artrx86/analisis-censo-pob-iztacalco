@@ -112,29 +112,6 @@ View(prorated_pop_ages_df2010)
 do_proration_validation(original_df = pop_ages_df2020, prorated_df = prorated_pop_ages_df2020)
 do_proration_validation(original_df = pop_ages_df2010, prorated_df = prorated_pop_ages_df2010)
 
-# Masculinity (sex-ratio) Index ---------------------------
-# Group prorated dataframe by quinquenials 
-prorated_pop_ages_quin_df2020 <- get_quinquenial_format_df(ages_df = prorated_pop_ages_df2020)
-prorated_pop_ages_quin_df2010 <- get_quinquenial_format_df(ages_df = prorated_pop_ages_df2010)
-
-masc_index_df2020 <- get_masc_index_df(prorated_pop_ages_quin_df2020)
-masc_index_df2010 <- get_masc_index_df(prorated_pop_ages_quin_df2010)
-
-# Visualization of the dataframes
-View(masc_index_df2020)
-View(masc_index_df2010)
-
-# Dependency Ratio ---------------------------
-# Dependency ratio for 2020
-get_dependency_index(prorated_pop_ages_quin_df2020, gender = "male") # 40.48327
-get_dependency_index(prorated_pop_ages_quin_df2020, gender = "female") # 42.19211
-get_dependency_index(prorated_pop_ages_quin_df2020, gender = "both") # 41.37474
-
-# Dependency ratio for 2010
-get_dependency_index(prorated_pop_ages_quin_df2010, gender = "male") # 44.40538 
-get_dependency_index(prorated_pop_ages_quin_df2010, gender = "female") # 43.99956
-get_dependency_index(prorated_pop_ages_quin_df2010, gender = "both") # 44.19202 
-
 # Spline function application ---------------------------
 # first we make the prorated_pop_ages_df2020 graph to apply the spline in a more visual way 
 plot(seq(0,100), prorated_pop_ages_df2020$HOMBRES[1:101], pch = 16, col = "violet", main = "males")
@@ -189,6 +166,31 @@ print(do_quadrature_factor_validation(quadrature_factor_inegi_df = quadrature_fa
 
 print(do_quadrature_factor_validation(quadrature_factor_inegi_df = quadrature_factor_2010df,
 				      inegi_df = prorated_pop_ages_df2010))
+
+
+
+# Masculinity (sex-ratio) Index ---------------------------
+# Group prorated dataframe by quinquenials 
+prorated_pop_ages_quin_df2020 <- get_quinquenial_format_df(ages_df = prorated_pop_ages_df2020)
+prorated_pop_ages_quin_df2010 <- get_quinquenial_format_df(ages_df = prorated_pop_ages_df2010)
+
+masc_index_df2020 <- get_masc_index_df(prorated_pop_ages_quin_df2020)
+masc_index_df2010 <- get_masc_index_df(prorated_pop_ages_quin_df2010)
+
+# Visualization of the dataframes
+View(masc_index_df2020)
+View(masc_index_df2010)
+
+# Dependency Ratio ---------------------------
+# Dependency ratio for 2020
+get_dependency_index(prorated_pop_ages_quin_df2020, gender = "male") # 40.48327
+get_dependency_index(prorated_pop_ages_quin_df2020, gender = "female") # 42.19211
+get_dependency_index(prorated_pop_ages_quin_df2020, gender = "both") # 41.37474
+
+# Dependency ratio for 2010
+get_dependency_index(prorated_pop_ages_quin_df2010, gender = "male") # 44.40538 
+get_dependency_index(prorated_pop_ages_quin_df2010, gender = "female") # 43.99956
+get_dependency_index(prorated_pop_ages_quin_df2010, gender = "both") # 44.19202 
 
 # Poblational Pyramid Pt. 2 ---------------------------
 
