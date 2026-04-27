@@ -66,13 +66,29 @@ get_whipple_index(ages_df = pop_ages_df2010, gender = "female") # female whipple
 get_whipple_index(ages_df = pop_ages_df2010, gender = "both") # both genders whipple's index for 2010: 117.7829
 
 # Myers' index
-get_myers_index(ages_df = pop_ages_df2020, gender = "male") # male Myers' index for 2020: 9.422554 
-get_myers_index(ages_df = pop_ages_df2020, gender = "female") # female Myers' index for 2020: 9.218148 
-get_myers_index(ages_df = pop_ages_df2020, gender = "both") # both genders Myers' index for 2020: 9.315056
+myers_index_2020_males <- get_myers_index(ages_df = pop_ages_df2020, gender = "male") 
+print(myers_index_2020_males[1]) # male Myers' index for 2020: 9.422554 
+View(myers_index_2020_males[2])
 
-get_myers_index(ages_df = pop_ages_df2010, gender = "male") # male Myers' index for 2010: 8.88766 
-get_myers_index(ages_df = pop_ages_df2010, gender = "female") # female Myers' index for 2010: 8.614865
-get_myers_index(ages_df = pop_ages_df2010, gender = "both") # both genders Myers' index for 2010: 8.743216
+myers_index_2020_females <- get_myers_index(ages_df = pop_ages_df2020, gender = "female") 
+print(myers_index_2020_females[1]) # female Myers' index for 2020: 9.218148 
+View(myers_index_2020_females[2])
+
+myers_index_2020_both <- get_myers_index(ages_df = pop_ages_df2020, gender = "both") 
+print(myers_index_2020_both[1]) # both genders Myers' index for 2020: 9.315056
+View(myers_index_2020_both[2])
+
+myers_index_2010_males <- get_myers_index(ages_df = pop_ages_df2010, gender = "male") 
+print(myers_index_2010_males[1]) # male Myers' index for 2010: 8.88766 
+View(myers_index_2010_males[2])
+
+myers_index_2010_females <- get_myers_index(ages_df = pop_ages_df2010, gender = "female") 
+print(myers_index_2010_females[1]) # female Myers' index for 2010: 8.614865
+View(myers_index_2010_females[2])
+
+myers_index_2010_both <- get_myers_index(ages_df = pop_ages_df2010, gender = "both") 
+print(myers_index_2010_both[1]) # both genders Myers' index for 2010: 8.743216
+View(myers_index_2010_both[2])
 
 # From right here we'll work with quinquenial age groups for some calculations
 pop_ages_quin_df2020 <- get_quinquenial_format_df(ages_df = pop_ages_df2020)

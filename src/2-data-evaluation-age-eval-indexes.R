@@ -112,10 +112,13 @@ get_whipple_index <- function(ages_df = data.frame(),
 get_myers_index <- function(ages_df = data.frame(),
 			      gender = "both") {
 
-    # Returns Myers' index from an INEGI formated dataframe with the following
+    # Returns a list with Myers' index, and a dataframe with the concentration weights of each
+    # age last digits from an INEGI formated dataframe with the following
     # structure as input:
     # | EDAD [string] | POB_TOTAL [int/num] | HOMBRES [int/num] | MUJERES [int/num] | 
-    # 
+    #
+    # output structure:
+    # list(myers_index [numeric], weights_df [data.frame])
     # To select the gender to get Myers' index, the param gender = "male", "female", "both"
     # is used
     # Used formula:
@@ -125,7 +128,7 @@ get_myers_index <- function(ages_df = data.frame(),
     # dataframe formating
     myers_pop_df <- get_indexes_format_df(ages_df, gender) 
     
-    # P_j construction so pj_vector = c(P_1, P_2, P_3, ..., P_9) where:
+    # P_j construction so pj_vector = c(P_0, P_1, P_2, P_3, ..., P_9) where:
     # P_j = \sum_{i \geq 1}{6} P_{10i + j}
     pj_vector <- c() 
     
@@ -140,10 +143,10 @@ get_myers_index <- function(ages_df = data.frame(),
     # a_j vector, so aj_vector <- c(1, 2, 3, ..., 10)
     aj_vector <- 1:10
     
-    # a_jP_j vector, so ajpj_vector = c(1 * P_1, 2 * P_2, 3 * P_3, ..., 9 * P_9)
+    # a_jP_j vector, so ajpj_vector = c(1 * P_0, 2 * P_1, 3 * P_2, ..., 10 * P_9)
     ajpj_vector = aj_vector * pj_vector
 
-    # P_j' construction so pj_alt_vector = c(P_1, P_2, P_3, ..., P_9) where:
+    # P_j' construction so pj_alt_vector = c(P_0, P_1, P_2, P_3, ..., P_9) where:
     # P_j' = \sum_{i \geq 2}{7} P_{20i + j}
     pj_alt_vector <- c() 
     
@@ -158,19 +161,23 @@ get_myers_index <- function(ages_df = data.frame(),
     # a_j' vector, so aj_alt_vector <- c(9, 8, 7, ..., 0)
     aj_alt_vector <- 9:0
     
-    # a_j'P_j' vector, so aj_alt_pj_alt_vector = c(1 * P_1, 2 * P_2, 3 * P_3, ..., 9 * P_9)
+    # a_j'P_j' vector, so aj_alt_pj_alt_vector = c(1 * P_0, 2 * P_1, 3 * P_2, ..., 10 * P_9)
     aj_alt_pj_alt_vector <- aj_alt_vector * pj_alt_vector
 
     # now we do the M_j formula with the obtained elements
     mj_vector <- ((ajpj_vector + aj_alt_pj_alt_vector) /
 		  sum(ajpj_vector + aj_alt_pj_alt_vector) - 0.10) * 100    
 
-    mj_vector
+    # make returnable the individual concentration weights of every digit
+    # for comprobations in a dataframe 
+    mj_digits <- 0:9
+    weights_df <- data.frame(mj_digits, mj_vector)
+    names(weights_df) <- c("Digit", "Concentration")
 
     # finally get Myers' index
     myers_index <- sum(abs(mj_vector))
-    
-    return(myers_index)
+   
+    return(list(myers_index, weights_df))
 }
 
 # UN Age Sex Accuracy Index 
