@@ -3,6 +3,12 @@
 # IMPORTANT: This file location has to be set as the working directory when executed in shell.
 # Made by: https://github.com/artrx86
 
+# if using R IDE try to change working directory to this script location
+tryCatch({ 
+    setwd(this.path::here())
+}, error = function(e) {
+})
+
 # Package Handling ---------------------------
 
 # Package names
@@ -26,12 +32,6 @@ source("src/4-masculinity-index.R")
 source("src/5-dependency-index.R")
 source("src/6-spline-quadrature-factor.R")
 source("src/7-population-growth-projection.R")
-
-# if using R IDE try to change working directory to this script location
-tryCatch({ 
-    setwd(this.path::here())
-}, error = function(e) {
-})
 
 # call the scripts functions
 
