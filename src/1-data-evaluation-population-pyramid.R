@@ -62,7 +62,7 @@ graph_pop_pyramid <- function(inegi_df = data.frame()) {
     data  <- pop_to_ggplot2(inegi_df)
     
     # graph using ggplot2
-    # (code [lines 53:62] taken and adapted from: https://www.statology.org/POBLACION-pyramid-in-r/)
+    # (code [lines 53:62] taken and adapted from: https://www.statology.org/population-pyramid-in-r/)
     ggplot(data, aes(x = EDAD, fill = GENERO,
                      y = ifelse(test = GENERO == "H",
                                 yes = -POBLACION, no = POBLACION))) +

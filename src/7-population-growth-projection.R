@@ -1,8 +1,8 @@
 # Population growth rate and projections tools script for Census of Population and Housing (CPV)
 # ages for years 2010 and 2020 in Iztacalco, Mexico City. 
 # Data from: https://en.www.inegi.org.mx/
-# The purpose of this script is to get the  
-# dataframe. 
+# The purpose of this script is to get the population growth rate and make projections with population data from
+# the INEGI CPV.
 #
 # Made by: https://github.com/artrx86
 

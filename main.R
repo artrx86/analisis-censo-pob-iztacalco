@@ -90,7 +90,7 @@ myers_index_2010_both <- get_myers_index(ages_df = pop_ages_df2010, gender = "bo
 print(myers_index_2010_both[1]) # both genders Myers' index for 2010: 8.743216
 View(myers_index_2010_both[2]) # digits concentration
 
-# From right here we'll work with quinquenial age groups for some calculations
+# we'll work with quinquenial age groups for UN index calculations
 pop_ages_quin_df2020 <- get_quinquenial_format_df(ages_df = pop_ages_df2020)
 pop_ages_quin_df2010 <- get_quinquenial_format_df(ages_df = pop_ages_df2010)
 
@@ -167,15 +167,20 @@ print(do_quadrature_factor_validation(quadrature_factor_inegi_df = quadrature_fa
 print(do_quadrature_factor_validation(quadrature_factor_inegi_df = quadrature_factor_2010df,
 				      inegi_df = prorated_pop_ages_df2010))
 
-
-
 # Masculinity (sex-ratio) Index ---------------------------
-# Group prorated dataframe by quinquenials 
-prorated_pop_ages_quin_df2020 <- get_quinquenial_format_df(ages_df = prorated_pop_ages_df2020)
-prorated_pop_ages_quin_df2010 <- get_quinquenial_format_df(ages_df = prorated_pop_ages_df2010)
 
-masc_index_df2020 <- get_masc_index_df(prorated_pop_ages_quin_df2020)
-masc_index_df2010 <- get_masc_index_df(prorated_pop_ages_quin_df2010)
+# Group prorated dataframe by quinquenials 
+# convert quadrature_factor_20XXdf to quinquenial formating
+fixed_pop_ages_quin_2020df <-  get_quinquenial_format_df(ages_df = quadrature_factor_2020df)
+			
+fixed_pop_ages_quin_2010df <-  get_quinquenial_format_df(ages_df = quadrature_factor_2010df)
+
+View(fixed_pop_ages_quin_2020df)
+View(fixed_pop_ages_quin_2010df)
+
+
+masc_index_df2020 <- get_masc_index_df(fixed_pop_ages_quin_2020df)
+masc_index_df2010 <- get_masc_index_df(fixed_pop_ages_quin_2010df)
 
 # Visualization of the dataframes
 View(masc_index_df2020)
@@ -183,37 +188,29 @@ View(masc_index_df2010)
 
 # Dependency Ratio ---------------------------
 # Dependency ratio for 2020
-get_dependency_index(prorated_pop_ages_quin_df2020, gender = "male") # 40.48327
-get_dependency_index(prorated_pop_ages_quin_df2020, gender = "female") # 42.19211
-get_dependency_index(prorated_pop_ages_quin_df2020, gender = "both") # 41.37474
+get_dependency_index(fixed_pop_ages_quin_2020df, gender = "male") # 40.44409
+get_dependency_index(fixed_pop_ages_quin_2020df, gender = "female") # 42.05729
+get_dependency_index(fixed_pop_ages_quin_2020df, gender = "both") # 41.28594
 
 # Dependency ratio for 2010
-get_dependency_index(prorated_pop_ages_quin_df2010, gender = "male") # 44.40538 
-get_dependency_index(prorated_pop_ages_quin_df2010, gender = "female") # 43.99956
-get_dependency_index(prorated_pop_ages_quin_df2010, gender = "both") # 44.19202 
+get_dependency_index(fixed_pop_ages_quin_2010df, gender = "male") # 44.58934
+get_dependency_index(fixed_pop_ages_quin_2010df, gender = "female") # 44.03214
+get_dependency_index(fixed_pop_ages_quin_2010df, gender = "both") # 44.29624
 
 # Poblational Pyramid Pt. 2 ---------------------------
 
-# convert quadrature_factor_20XXdf to quinquenial formating
-quadrature_factor_quin_2020df <-  get_quinquenial_format_df(ages_df = quadrature_factor_2020df)
-			
-quadrature_factor_quin_2010df <-  get_quinquenial_format_df(ages_df = quadrature_factor_2010df)
-
-View(quadrature_factor_quin_2020df)
-View(quadrature_factor_quin_2010df)
-
-quadrature_factor_quin_pyramid_2020df <- quadrature_factor_quin_2020df
-quadrature_factor_quin_pyramid_2010df <- quadrature_factor_quin_2010df
+quadrature_factor_quin_pyramid_2020df <- fixed_pop_ages_quin_2020df
+quadrature_factor_quin_pyramid_2010df <- fixed_pop_ages_quin_2010df
 
 quadrature_factor_quin_pyramid_2020df$age <- paste(sprintf("%02d",
-							   quadrature_factor_quin_2020df$starting_age),
+							   fixed_pop_ages_quin_2020df$starting_age),
 						   "-", 
-						   sprintf("%02d",quadrature_factor_quin_2020df$ending_age))
+						   sprintf("%02d",fixed_pop_ages_quin_2020df$ending_age))
 
 quadrature_factor_quin_pyramid_2010df$age <- paste(sprintf("%02d",
-							   quadrature_factor_quin_2010df$starting_age),
+							   fixed_pop_ages_quin_2010df$starting_age),
 						   "-", 
-						   sprintf("%02d",quadrature_factor_quin_2010df$ending_age))
+						   sprintf("%02d",fixed_pop_ages_quin_2010df$ending_age))
 
 # select the columns to use
 quadrature_factor_quin_pyramid_2020df <- quadrature_factor_quin_pyramid_2020df %>% select("EDAD"="age",
@@ -239,8 +236,8 @@ years_passed_btwn_census <-  as.numeric(difftime(date_2020_census, date_2010_cen
 
 # getting population growth rates (9.76 aprox. years in this case)
 
-geometric_pg_2010_2020_rate_df <- get_geometric_pg_rate(inegi_quinquenial_df = quadrature_factor_quin_2010df, comparison_df = quadrature_factor_quin_2020df, years_passed=years_passed_btwn_census)
-exponential_pg_2010_2020_rate_df <- get_exponential_pg_rate(inegi_quinquenial_df = quadrature_factor_quin_2010df, comparison_df = quadrature_factor_quin_2020df, years_passed=years_passed_btwn_census)
+geometric_pg_2010_2020_rate_df <- get_geometric_pg_rate(inegi_quinquenial_df = fixed_pop_ages_quin_2010df, comparison_df = fixed_pop_ages_quin_2020df, years_passed=years_passed_btwn_census)
+exponential_pg_2010_2020_rate_df <- get_exponential_pg_rate(inegi_quinquenial_df = fixed_pop_ages_quin_2010df, comparison_df = fixed_pop_ages_quin_2020df, years_passed=years_passed_btwn_census)
 
 View(geometric_pg_2010_2020_rate_df)
 View(exponential_pg_2010_2020_rate_df)
@@ -255,11 +252,11 @@ projection_2010_2015_years_passed <- as.numeric(difftime(date_2015_projection,
 							 date_2010_census,
 							 units = "days") / 365)
 
-geom_projection_2010_2015_df <- get_geometric_pg_projection(inegi_quinquenial_df = quadrature_factor_quin_2010df,
+geom_projection_2010_2015_df <- get_geometric_pg_projection(inegi_quinquenial_df = fixed_pop_ages_quin_2010df,
 						       projection_rates_df = geometric_pg_2010_2020_rate_df,
 						       years_projection_time = projection_2010_2015_years_passed) 
 
-exp_projection_2010_2015_df <- get_exponential_pg_projection(inegi_quinquenial_df = quadrature_factor_quin_2010df,
+exp_projection_2010_2015_df <- get_exponential_pg_projection(inegi_quinquenial_df = fixed_pop_ages_quin_2010df,
 			    projection_rates_df = exponential_pg_2010_2020_rate_df,
 			    years_projection_time = projection_2010_2015_years_passed) 
 
@@ -270,11 +267,11 @@ projection_2020_2020_years_passed <- as.numeric(difftime(date_2020_projection,
 							 date_2020_census,
 							 units = "days") / 365)
 
-geom_projection_2020_2020_df <- get_geometric_pg_projection(inegi_quinquenial_df = quadrature_factor_quin_2020df,
+geom_projection_2020_2020_df <- get_geometric_pg_projection(inegi_quinquenial_df = fixed_pop_ages_quin_2020df,
 						       projection_rates_df = geometric_pg_2010_2020_rate_df,
 						       years_projection_time = projection_2020_2020_years_passed) 
 
-exp_projection_2020_2020_df <- get_exponential_pg_projection(inegi_quinquenial_df = quadrature_factor_quin_2020df,
+exp_projection_2020_2020_df <- get_exponential_pg_projection(inegi_quinquenial_df = fixed_pop_ages_quin_2020df,
 			    projection_rates_df = exponential_pg_2010_2020_rate_df,
 			    years_projection_time = projection_2020_2020_years_passed) 
 
@@ -282,8 +279,8 @@ exp_projection_2020_2020_df <- get_exponential_pg_projection(inegi_quinquenial_d
 
 # Pre-Projected dataframes
 
-View(quadrature_factor_quin_2010df)		
-View(quadrature_factor_quin_2020df)	
+View(fixed_pop_ages_quin_2010df)		
+View(fixed_pop_ages_quin_2020df)	
 
 # Projections up to 2015-06-30		      	
 View(geom_projection_2010_2015_df)	

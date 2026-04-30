@@ -1,8 +1,8 @@
-# spline script for Census of Population and Housing (CPV) ages for years 2010 and
+# Spline script for Census of Population and Housing (CPV) ages for years 2010 and
 # 2020 in Iztacalco, Mexico City. 
 # Data from: https://en.www.inegi.org.mx/
-# The purpose of this script is to get the  
-# dataframe. 
+# The purpose of this script is making interpolation spline and quadrature factor fixing
+# tools to handle the data from the INEGI CPV. 
 #
 # Made by: https://github.com/artrx86
 
