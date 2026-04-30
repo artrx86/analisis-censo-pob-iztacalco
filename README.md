@@ -17,7 +17,7 @@ compatibilidad y eficiencia de recursos posible.
 Se adjunta un ensayo realizado a partir de las conclusiones
 obtenidas así como una explicación más a fondo de los procesos
 realizados a lo largo de este proyecto en formato pdf 
-[aquí.](https://github.com/user-attachments/files/27238465/analisis-censo-pob-iztacalco.pdf)
+[aquí.](https://github.com/user-attachments/files/27241198/analisis-censo-pob-iztacalco.pdf)
 
 Este proyecto fue realizado para el curso de Demografía de la
 profesora Irene Nava Ruiz impartida en la Facultad de Ciencias,
